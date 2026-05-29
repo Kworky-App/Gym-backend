@@ -7,7 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GymApp.Domain\GymApp.Domain.csproj" />
+      <ProjectReference Include="..\GymApp.Infrastructure\GymApp.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
