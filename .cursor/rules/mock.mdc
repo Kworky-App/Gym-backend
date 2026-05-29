@@ -1,0 +1,161 @@
+---
+description: Generate in-memory mocks for GymApp Domain layer (hexagonal architecture)
+globs:
+  - "GymApp.Tests/**"
+  - "GymApp.Domain/**"
+alwaysApply: false
+---
+
+# In-Memory Mock Generator
+
+You are an expert assistant in C# / .NET 10 hexagonal architecture.
+Your role is to generate **manual in-memory implementations** (without external libraries)
+to test the `Domain` layer of GymApp in isolation.
+
+## Project Context
+
+```
+GymApp.Domain/           — Entities, interfaces (Ports). No external dependencies.
+GymApp.Infrastructure/   — Real adapters (persistence, external services)
+GymApp.Tests/            — Tests; this is where in-memory mocks live
+```
+
+Absolute rule: `Domain` must never depend on `Infrastructure` or external mock libraries
+(Moq, NSubstitute). In-memory mocks **implement Domain interfaces** and live in `GymApp.Tests/Mocks/`.
+
+## Steps to follow
+
+### Step 1 — Understand the request
+Ask minimal questions if the description is ambiguous:
+- Which entity/aggregate is involved?
+- Which operations does the mock need to support (read, write, search…)?
+- Is there any specific behavior to simulate (e.g. return null if not found, throw an exception)?
+
+### Step 2 — Check if the interface already exists
+Look in `GymApp.Domain/` for a matching interface (e.g. `IUserRepository`,
+`IWorkoutPlanRepository`). Read existing files before generating.
+
+### Step 3a — If the interface does not exist yet
+Generate **both**:
+
+**`GymApp.Domain/Ports/I<Name>Repository.cs`** (or `I<Name>Service.cs`):
+```csharp
+namespace GymApp.Domain.Ports;
+
+public interface I<Name>Repository
+{
+    Task<Entity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Entity>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task AddAsync(Entity entity, CancellationToken cancellationToken = default);
+    Task UpdateAsync(Entity entity, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+}
+```
+Adapt the methods to what the user describes. Only include what is requested.
+
+**`GymApp.Tests/Mocks/InMemory<Name>Repository.cs`**
+
+### Step 3b — If the interface already exists
+Generate only the mock `GymApp.Tests/Mocks/InMemory<Name>Repository.cs`.
+
+### Step 4 — In-memory mock pattern
+
+Strictly follow this pattern:
+
+```csharp
+namespace GymApp.Tests.Mocks;
+
+public sealed class InMemory<Name>Repository : I<Name>Repository
+{
+    private readonly Dictionary<Guid, <Entity>> _store = new();
+
+    // Direct access for assertions in tests
+    public IReadOnlyDictionary<Guid, <Entity>> Store => _store;
+
+    public Task<<Entity>?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        _store.TryGetValue(id, out var entity);
+        return Task.FromResult(entity);
+    }
+
+    public Task<IReadOnlyList<<Entity>>> GetAllAsync(CancellationToken cancellationToken = default)
+        => Task.FromResult<IReadOnlyList<<Entity>>>(_store.Values.ToList());
+
+    public Task AddAsync(<Entity> entity, CancellationToken cancellationToken = default)
+    {
+        _store[entity.Id] = entity;
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateAsync(<Entity> entity, CancellationToken cancellationToken = default)
+    {
+        _store[entity.Id] = entity;
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        _store.Remove(id);
+        return Task.CompletedTask;
+    }
+}
+```
+
+**Style rules:**
+- `sealed` by default (mocks are not meant to be inherited)
+- Expose `Store` as read-only to allow direct assertions in tests
+- `Task.FromResult` / `Task.CompletedTask` — no unnecessary `async`/`await`
+- Nullable enabled: use `?` correctly
+- Namespaces: `GymApp.Domain.Ports`, `GymApp.Tests.Mocks`
+- No comments unless the simulated logic is not obvious
+
+### Step 5 — Usage example in a test
+
+Always provide a short example (xUnit test stub) showing how to use the mock:
+
+```csharp
+public class <Name>ServiceTests
+{
+    [Fact]
+    public async Task <Scenario>_<ExpectedResult>()
+    {
+        // Arrange
+        var repository = new InMemory<Name>Repository();
+        await repository.AddAsync(new <Entity> { Id = Guid.NewGuid(), /* … */ });
+
+        var sut = new <Service>(repository);
+
+        // Act
+        var result = await sut.<Method>();
+
+        // Assert
+        Assert.NotNull(result);
+    }
+}
+```
+
+### Step 6 — Verification
+
+After generating the files, run:
+```bash
+dotnet build
+```
+and fix any compilation error before considering the task done.
+
+## What you must NOT do
+
+- Add NuGet dependencies (Moq, NSubstitute, FakeItEasy, etc.)
+- Place test code in `GymApp.Domain` or `GymApp.Infrastructure`
+- Create abstract classes or complex hierarchies for mocks
+- Add business logic in the mock (the mock simulates, it does not calculate)
+- Omit the `GymApp.Tests` project from the solution if xUnit is not yet referenced
+  (in that case, add xUnit before writing tests)
+
+## Add xUnit if needed
+
+If `GymApp.Tests` does not yet have a test framework:
+```bash
+dotnet add GymApp.Tests/GymApp.Tests.csproj package xunit
+dotnet add GymApp.Tests/GymApp.Tests.csproj package xunit.runner.visualstudio
+dotnet add GymApp.Tests/GymApp.Tests.csproj package Microsoft.NET.Test.Sdk
+```
