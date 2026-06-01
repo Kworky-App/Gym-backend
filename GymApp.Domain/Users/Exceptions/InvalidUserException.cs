@@ -1,6 +1,6 @@
-namespace GymApp.Domain.users.Exceptions;
+namespace GymApp.Domain.Users.Exceptions;
 
-public class InvalidUserException : Exception
+public class InvalidUserException:Exception
 {
     public InvalidUserException(string message)
         : base(message)

@@ -1,4 +1,5 @@
-namespace DefaultNamespace;
+using GymApp.Domain.Users.Exceptions;
+namespace GymApp.Domain.Users;
 
 public class User
 {
@@ -18,7 +19,7 @@ public class User
         DateOnly dateOfBirth,
         Email email,
         Gender gender,
-        string passwordHash, )
+        string passwordHash )
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidUserException("Name cannot be blank.");

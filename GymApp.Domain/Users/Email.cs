@@ -1,4 +1,6 @@
-namespace DefaultNamespace;
+using GymApp.Domain.Users.Exceptions;
+
+namespace GymApp.Domain.Users;
 
 public sealed class Email
 {
@@ -7,10 +9,10 @@ public sealed class Email
     public Email(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Email is required.");
+            throw new InvalidEmailException("Email is required.");
 
         if (!value.Contains("@"))
-            throw new ArgumentException("Email is invalid.");
+            throw new InvalidEmailException("Email is invalid.");
 
         Value = value.ToLowerInvariant();
     }
