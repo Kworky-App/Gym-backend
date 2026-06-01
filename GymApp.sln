@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymApp.Infrastructure", "Gy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymApp.Tests", "GymApp.Tests\GymApp.Tests.csproj", "{1888CF73-B24C-4AFB-9ABD-0B994C675C49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymApp.App", "GymApp.App\GymApp.App.csproj", "{4BE08238-6C5F-4539-BB0F-2547C4086ACB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{1888CF73-B24C-4AFB-9ABD-0B994C675C49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1888CF73-B24C-4AFB-9ABD-0B994C675C49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1888CF73-B24C-4AFB-9ABD-0B994C675C49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BE08238-6C5F-4539-BB0F-2547C4086ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BE08238-6C5F-4539-BB0F-2547C4086ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BE08238-6C5F-4539-BB0F-2547C4086ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BE08238-6C5F-4539-BB0F-2547C4086ACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
