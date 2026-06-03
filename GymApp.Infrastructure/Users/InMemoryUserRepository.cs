@@ -2,7 +2,7 @@ using GymApp.Domain.Users;
 
 namespace GymApp.Infrastructure.Users;
 
-public class InMemoryUserRepository
+public class InMemoryUserRepository : IUserRepository
 {
     private readonly List<User> _users = new();
 
