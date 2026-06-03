@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GymApp.App\GymApp.App.csproj" />
       <ProjectReference Include="..\GymApp.Domain\GymApp.Domain.csproj" />
       <ProjectReference Include="..\GymApp.Infrastructure\GymApp.Infrastructure.csproj" />
     </ItemGroup>
