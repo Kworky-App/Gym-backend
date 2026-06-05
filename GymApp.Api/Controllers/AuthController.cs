@@ -1,4 +1,5 @@
 using GymApp.App.Users;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymApp.Api.Controllers;
@@ -8,10 +9,12 @@ namespace GymApp.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly RegisterUserService _registerUserService;
+    private readonly LoginUserService _loginUserService;
 
-    public AuthController(RegisterUserService registerUserService)
+    public AuthController(RegisterUserService registerUserService,LoginUserService loginUserService)
     {
         _registerUserService = registerUserService;
+        _loginUserService = loginUserService;
     }
 
     [HttpPost("register")]
@@ -38,5 +41,24 @@ public class AuthController : ControllerBase
         {
             return Conflict(new{message = exception.Message});
         }
+    }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserRequest request)
+    {
+        try
+        {
+            var response = await _loginUserService.Login(request);
+            return Ok(response);
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { message = exception.Message });
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            return Unauthorized(new { message = exception.Message });
+        }
+
+        
     }
 }
