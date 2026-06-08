@@ -12,9 +12,21 @@ public class InMemoryUserRepository : IUserRepository
         return Task.FromResult(user);
     }
 
+    public Task<User?> GetByIdAsync(Guid id)
+    {
+        var user = _users.FirstOrDefault(user => user.Id == id);
+        return Task.FromResult(user);
+    }
+
     public Task AddAsync(User user)
     {
         _users.Add(user);
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteAsync(User user)
+    {
+        _users.Remove(user);
         return Task.CompletedTask;
     }
 }
