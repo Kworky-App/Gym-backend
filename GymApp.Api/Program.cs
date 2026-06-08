@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<RegisterUserService>();
+builder.Services.AddScoped<LoginUserService>();
 
 var app = builder.Build();
 
