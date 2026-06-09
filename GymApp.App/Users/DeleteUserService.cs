@@ -5,13 +5,22 @@ namespace GymApp.App.Users;
 public class DeleteUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IPasswordHasher _passwordHasher;
+    
 
-    public DeleteUserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+    public DeleteUserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _passwordHasher = passwordHasher;
     }
-    
+
+    public async Task DeleteUserAsync(Guid userId)
+    {
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user is null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+        await _userRepository.DeleteAsync(user);
+    }
     
 }
