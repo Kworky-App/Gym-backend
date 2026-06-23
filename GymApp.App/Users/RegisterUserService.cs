@@ -15,7 +15,7 @@ public class RegisterUserService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<User> RegisterAsync(RegisterUserRequest request)
+    public async Task<RegisterUserResponse> RegisterAsync(RegisterUserRequest request)
     {
         ValidateRequest(request);
 
@@ -39,7 +39,27 @@ public class RegisterUserService
 
         await _userRepository.AddAsync(user);
 
-        return user;
+        return new RegisterUserResponse(
+            user.Id,
+            user.Name,
+            user.Email.ToString(),
+            user.Gender.ToString(),
+            FormatQuebecDateTime(user.CreatedAt));
+    }
+    private static string FormatQuebecDateTime(DateTime createdAt)
+    {
+        var quebecTimeZone =
+            TimeZoneInfo.FindSystemTimeZoneById("America/Toronto");
+
+        var utcDateTime =
+            DateTime.SpecifyKind(createdAt, DateTimeKind.Utc);
+
+        var quebecTime =
+            TimeZoneInfo.ConvertTimeFromUtc(
+                utcDateTime,
+                quebecTimeZone);
+
+        return quebecTime.ToString("yyyy-MM-dd HH:mm:ss");
     }
 
     private static void ValidateRequest(RegisterUserRequest request)
