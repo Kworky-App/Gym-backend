@@ -29,4 +29,68 @@ public class UsersTests
       Assert.Equal(ValidGender, user.Gender);
       Assert.Equal(ValidPasswordHash, user.PasswordHash);
    }
+
+   [Fact]
+   public void Constructor_WithBlankName_ShouldThrowInvalidUserException()
+   {
+      const string invalidName = "";
+      
+      var blankUsername = () => new User(invalidName, ValidDateOfBirth, ValidEmail, ValidGender, ValidPasswordHash);
+
+      Assert.Throws<InvalidUserException>(blankUsername);
+   }
+   
+   [Fact]
+   public void Constructor_WithNullEmail_ShouldThrowInvalidUserException()
+   {
+     
+      var act = () => new User(
+         ValidName,
+         ValidDateOfBirth,
+         null!,
+         ValidGender,
+         ValidPasswordHash);
+      
+      Assert.Throws<InvalidUserException>(act);
+   }
+   [Fact]
+   public void Constructor_WithBlankPasswordHash_ShouldThrowInvalidUserException()
+   {
+      const string invalidPasswordHash = "";
+      
+      var act = () => new User(
+         ValidName,
+         ValidDateOfBirth,
+         ValidEmail,
+         ValidGender,
+         invalidPasswordHash);
+      
+      Assert.Throws<InvalidUserException>(act);
+   }
+   [Fact]
+   public void Constructor_ShouldGenerateId()
+   {
+      
+      var user = CreateValidUser();
+      
+      Assert.NotEqual(Guid.Empty, user.Id);
+   }
+ 
+   [Fact]
+   public void Constructor_ShouldSetCreatedAtToCurrentUtcTime()
+   {
+     
+      var beforeCreation = DateTime.UtcNow;
+
+    
+      var user = CreateValidUser();
+
+      var afterCreation = DateTime.UtcNow;
+
+      
+      Assert.InRange(
+         user.CreatedAt,
+         beforeCreation,
+         afterCreation);
+   }
 }
