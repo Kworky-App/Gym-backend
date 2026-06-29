@@ -8,11 +8,11 @@ public class FakePasswordHasher : IPasswordHasher
 
     public string Hash(string password)
     {
-        return PasswordHash;
+        return $"hashed-{password}";
     }
 
     public bool Verify(string password, string passwordHash)
     {
-        return passwordHash == PasswordHash;
+        return passwordHash == Hash(password);
     }
 }
