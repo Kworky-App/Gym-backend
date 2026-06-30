@@ -37,12 +37,13 @@ public class LoginUserServiceTests
 
     private static User CreateUser()
     {
+        var passwordHasher = new FakePasswordHasher();
         return new User(
             ValidName,
             ValidDateOfBirth,
             new Email(ValidEmail),
             ValidGender,
-            PasswordHash);
+            passwordHasher.Hash(ValidPassword));
     }
 
     [Fact]
