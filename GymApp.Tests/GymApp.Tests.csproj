@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+      <ProjectReference Include="..\GymApp.Api\GymApp.Api.csproj" />
+      <ProjectReference Include="..\GymApp.App\GymApp.App.csproj" />
       <ProjectReference Include="..\GymApp.Domain\GymApp.Domain.csproj" />
+      <ProjectReference Include="..\GymApp.Infrastructure\GymApp.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -13,10 +16,15 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Api\" />
+    </ItemGroup>
+
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
 </Project>

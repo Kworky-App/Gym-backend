@@ -22,24 +22,17 @@ public class AuthController : ControllerBase
     {
         try
         {
-            var user = await _registerUserService.RegisterAsync(request);
-            return Created("/auth/register", new
-            {
-                id = user.Id,
-                name = user.Name,
-                dateOfBirth = user.DateOfBirth,
-                gender = user.Gender.ToString(),
-                email = user.Email.Value,
-                createdAt = user.CreatedAt
-            });
+            var response = await _registerUserService.RegisterAsync(request);
+
+            return Created("/auth/register", response);
         }
         catch (ArgumentException exception)
         {
-            return BadRequest(new{message = exception.Message});
+            return BadRequest(new { message = exception.Message });
         }
-        catch(InvalidOperationException exception)
+        catch (InvalidOperationException exception)
         {
-            return Conflict(new{message = exception.Message});
+            return Conflict(new { message = exception.Message });
         }
     }
     [HttpPost("login")]
