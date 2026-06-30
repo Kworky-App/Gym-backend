@@ -41,14 +41,14 @@ public class RegisterUserServiceTests
     [Fact]
     public async Task RegisterAsync_WithValidRequest_ShouldRegisterUser()
     {
-        
+
         var service = CreateService();
         var request = CreateValidRequest();
 
-       
+
         var response = await service.RegisterAsync(request);
 
-        
+
         Assert.NotEqual(Guid.Empty, response.Id);
         Assert.Equal(ValidName, response.Name);
         Assert.Equal(ValidEmail, response.Email);
@@ -58,31 +58,31 @@ public class RegisterUserServiceTests
     [Fact]
     public async Task RegisterAsync_WithValidRequest_ShouldAddUserToRepository()
     {
-        
+
         var service = CreateService();
         var request = CreateValidRequest();
 
-        
+
         await service.RegisterAsync(request);
 
         var user = await _userRepository.GetByEmailAsync(
             new Email(ValidEmail));
-        
+
         Assert.NotNull(user);
     }
 
     [Fact]
     public async Task RegisterAsync_ShouldStoreHashedPassword()
     {
-        
+
         var service = CreateService();
         var request = CreateValidRequest();
-        
+
         await service.RegisterAsync(request);
 
         var user = await _userRepository.GetByEmailAsync(
             new Email(ValidEmail));
-        
+
         Assert.NotNull(user);
         Assert.Equal(PasswordHash, user.PasswordHash);
     }
@@ -93,9 +93,9 @@ public class RegisterUserServiceTests
         var service = CreateService();
         var request = CreateValidRequest();
 
-        
+
         var response = await service.RegisterAsync(request);
-        
+
         Assert.False(string.IsNullOrWhiteSpace(response.CreatedAt));
     }
 
@@ -106,9 +106,9 @@ public class RegisterUserServiceTests
         var request = CreateValidRequest();
 
         await service.RegisterAsync(request);
-        
+
         var act = () => service.RegisterAsync(request);
-        
+
         await Assert.ThrowsAsync<InvalidOperationException>(act);
     }
 
@@ -125,9 +125,9 @@ public class RegisterUserServiceTests
             ValidGender,
             ValidEmail,
             ValidPassword);
-        
+
         var act = () => service.RegisterAsync(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 
@@ -144,9 +144,9 @@ public class RegisterUserServiceTests
             ValidGender,
             blankEmail,
             ValidPassword);
-        
+
         var act = () => service.RegisterAsync(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 
@@ -163,9 +163,9 @@ public class RegisterUserServiceTests
             ValidGender,
             ValidEmail,
             blankPassword);
-        
+
         var act = () => service.RegisterAsync(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 
@@ -180,10 +180,10 @@ public class RegisterUserServiceTests
             ValidGender,
             ValidEmail,
             ValidPassword);
-        
+
         var act = () => service.RegisterAsync(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
-    
+
 }

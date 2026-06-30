@@ -1,6 +1,6 @@
 namespace GymApp.Domain.Users.Exceptions;
 
-public class InvalidEmailException: Exception
+public class InvalidEmailException : Exception
 {
     public InvalidEmailException(string message) : base(message)
     {

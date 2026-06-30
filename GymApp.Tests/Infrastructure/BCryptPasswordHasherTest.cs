@@ -11,11 +11,11 @@ public class BCryptPasswordHasherTests
     [Fact]
     public void Hash_WithValidPassword_ShouldReturnPasswordHash()
     {
-        
+
         var passwordHasher = new BCryptPasswordHasher();
-        
+
         var passwordHash = passwordHasher.Hash(ValidPassword);
-        
+
         Assert.False(string.IsNullOrWhiteSpace(passwordHash));
         Assert.NotEqual(ValidPassword, passwordHash);
     }
@@ -23,24 +23,24 @@ public class BCryptPasswordHasherTests
     [Fact]
     public void Verify_WithValidPasswordAndMatchingHash_ShouldReturnTrue()
     {
-        
+
         var passwordHasher = new BCryptPasswordHasher();
         var passwordHash = passwordHasher.Hash(ValidPassword);
-        
+
         var result = passwordHasher.Verify(ValidPassword, passwordHash);
-        
+
         Assert.True(result);
     }
 
     [Fact]
     public void Verify_WithInvalidPasswordAndHash_ShouldReturnFalse()
     {
-        
+
         var passwordHasher = new BCryptPasswordHasher();
         var passwordHash = passwordHasher.Hash(ValidPassword);
-        
+
         var result = passwordHasher.Verify(InvalidPassword, passwordHash);
-        
+
         Assert.False(result);
     }
 
@@ -48,10 +48,10 @@ public class BCryptPasswordHasherTests
     public void Hash_WithSamePasswordTwice_ShouldReturnDifferentHashes()
     {
         var passwordHasher = new BCryptPasswordHasher();
-        
+
         var firstPasswordHash = passwordHasher.Hash(ValidPassword);
         var secondPasswordHash = passwordHasher.Hash(ValidPassword);
-        
+
         Assert.NotEqual(firstPasswordHash, secondPasswordHash);
     }
 }

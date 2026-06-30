@@ -8,7 +8,7 @@ public class InMemoryUserRepository : IUserRepository
 
     public Task<User?> GetByEmailAsync(Email email)
     {
-        var user = _users.FirstOrDefault(user =>user.Email.Value == email.Value);
+        var user = _users.FirstOrDefault(user => user.Email.Value == email.Value);
         return Task.FromResult(user);
     }
 

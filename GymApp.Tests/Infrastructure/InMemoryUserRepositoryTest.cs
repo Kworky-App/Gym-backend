@@ -33,10 +33,10 @@ public class InMemoryUserRepositoryTests
     public async Task AddAsync_ShouldAddUser()
     {
         var user = CreateUser();
-        
+
         await _repository.AddAsync(user);
         var result = await _repository.GetByIdAsync(user.Id);
-        
+
         Assert.NotNull(result);
     }
 
@@ -46,9 +46,9 @@ public class InMemoryUserRepositoryTests
         var user = CreateUser();
 
         await _repository.AddAsync(user);
-        
+
         var result = await _repository.GetByIdAsync(user.Id);
-        
+
         Assert.Equal(user, result);
     }
 
@@ -56,9 +56,9 @@ public class InMemoryUserRepositoryTests
     public async Task GetByIdAsync_WithUnknownUserId_ShouldReturnNull()
     {
         var unknownUserId = Guid.NewGuid();
-        
+
         var result = await _repository.GetByIdAsync(unknownUserId);
-        
+
         Assert.Null(result);
     }
 
@@ -68,9 +68,9 @@ public class InMemoryUserRepositoryTests
         var user = CreateUser();
 
         await _repository.AddAsync(user);
-        
+
         var result = await _repository.GetByEmailAsync(user.Email);
-        
+
         Assert.Equal(user, result);
     }
 
@@ -78,25 +78,25 @@ public class InMemoryUserRepositoryTests
     public async Task GetByEmailAsync_WithUnknownEmail_ShouldReturnNull()
     {
         var unknownEmail = new Email("unknown@test.com");
-        
+
         var result = await _repository.GetByEmailAsync(unknownEmail);
-        
+
         Assert.Null(result);
     }
 
     [Fact]
     public async Task DeleteAsync_ShouldRemoveUser()
     {
-        
+
         var user = CreateUser();
 
         await _repository.AddAsync(user);
 
-        
+
         await _repository.DeleteAsync(user);
         var result = await _repository.GetByIdAsync(user.Id);
 
-        
+
         Assert.Null(result);
     }
 }
