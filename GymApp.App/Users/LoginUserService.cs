@@ -14,11 +14,11 @@ public class LoginUserService
     }
 
     public async Task<LoginUserResponse> Login(LoginUserRequest request)
-    { 
+    {
         ValidateRequest(request);
-        
+
         var email = new Email(request.Email);
-        
+
         var user = await _userRepository.GetByEmailAsync(email);
         if (user is null)
         {
@@ -29,17 +29,17 @@ public class LoginUserService
         {
             throw new UnauthorizedAccessException("Invalid credentials.");
         }
-        return new LoginUserResponse(user.Id, user.Email.ToString(),"made-uptoken");
-        
+        return new LoginUserResponse(user.Id, user.Email.ToString(), "made-uptoken");
+
     }
     private static void ValidateRequest(LoginUserRequest request)
     {
-       
+
         if (string.IsNullOrWhiteSpace(request.Email))
             throw new ArgumentException("Email is required.");
 
         if (string.IsNullOrWhiteSpace(request.Password))
             throw new ArgumentException("Password is required.");
-        
+
     }
 }

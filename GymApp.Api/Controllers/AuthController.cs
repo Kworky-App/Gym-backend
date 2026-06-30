@@ -11,7 +11,7 @@ public class AuthController : ControllerBase
     private readonly RegisterUserService _registerUserService;
     private readonly LoginUserService _loginUserService;
 
-    public AuthController(RegisterUserService registerUserService,LoginUserService loginUserService)
+    public AuthController(RegisterUserService registerUserService, LoginUserService loginUserService)
     {
         _registerUserService = registerUserService;
         _loginUserService = loginUserService;
@@ -52,6 +52,6 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = exception.Message });
         }
 
-        
+
     }
 }

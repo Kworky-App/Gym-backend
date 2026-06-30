@@ -5,7 +5,7 @@ namespace GymApp.App.Users;
 public class DeleteUserService
 {
     private readonly IUserRepository _userRepository;
-    
+
 
     public DeleteUserService(IUserRepository userRepository)
     {
@@ -22,5 +22,5 @@ public class DeleteUserService
         }
         await _userRepository.DeleteAsync(user);
     }
-    
+
 }

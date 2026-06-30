@@ -37,12 +37,13 @@ public class LoginUserServiceTests
 
     private static User CreateUser()
     {
+        var passwordHasher = new FakePasswordHasher();
         return new User(
             ValidName,
             ValidDateOfBirth,
             new Email(ValidEmail),
             ValidGender,
-            PasswordHash);
+            passwordHasher.Hash(ValidPassword));
     }
 
     [Fact]
@@ -53,9 +54,9 @@ public class LoginUserServiceTests
         var request = CreateValidRequest();
 
         await _userRepository.AddAsync(user);
-        
+
         var response = await service.Login(request);
-        
+
         Assert.Equal(user.Id, response.Id);
         Assert.Equal(ValidEmail, response.Email);
         Assert.Equal(ExpectedToken, response.Token);
@@ -66,9 +67,9 @@ public class LoginUserServiceTests
     {
         var service = CreateService();
         var request = CreateValidRequest();
-        
+
         var act = () => service.Login(request);
-        
+
         await Assert.ThrowsAsync<UnauthorizedAccessException>(act);
     }
 
@@ -84,17 +85,17 @@ public class LoginUserServiceTests
             ValidEmail,
             InvalidPassword);
 
-       
+
         var act = () => service.Login(request);
 
-       
+
         await Assert.ThrowsAsync<UnauthorizedAccessException>(act);
     }
 
     [Fact]
     public async Task Login_WithBlankEmail_ShouldThrowArgumentException()
     {
-       
+
         const string blankEmail = "";
 
         var service = CreateService();
@@ -102,9 +103,9 @@ public class LoginUserServiceTests
         var request = new LoginUserRequest(
             blankEmail,
             ValidPassword);
-        
+
         var act = () => service.Login(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 
@@ -118,9 +119,9 @@ public class LoginUserServiceTests
         var request = new LoginUserRequest(
             ValidEmail,
             blankPassword);
-        
+
         var act = () => service.Login(request);
-        
+
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 }

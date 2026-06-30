@@ -2,12 +2,13 @@ using GymApp.App.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymApp.Api.Controllers;
+
 [ApiController]
 [Route("users")]
 public class UsersController : ControllerBase
 {
     private readonly DeleteUserService _deleteUserService;
-    
+
     public UsersController(DeleteUserService deleteUserService)
     {
         _deleteUserService = deleteUserService;
