@@ -84,7 +84,7 @@ public class RegisterUserServiceTests
             new Email(ValidEmail));
 
         Assert.NotNull(user);
-        Assert.Equal(PasswordHash, user.PasswordHash);
+        Assert.Equal(_passwordHasher.Hash(ValidPassword), user.PasswordHash);
     }
 
     [Fact]
