@@ -2,6 +2,7 @@ using Scalar.AspNetCore;
 using GymApp.App.Users;
 using GymApp.Domain.Users;
 using GymApp.Infrastructure.Users;
+using GymApp.Infrastructure.Authentification;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,11 @@ builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 builder.Services.AddScoped<RegisterUserService>();
 builder.Services.AddScoped<LoginUserService>();
 builder.Services.AddScoped<DeleteUserService>();
+
+builder.Services.Configure<JwtOptions>(
+    builder.Configuration.GetSection(JwtOptions.SectionName));
+
+builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
 var app = builder.Build();
 
