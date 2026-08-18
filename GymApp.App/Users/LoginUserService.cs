@@ -6,11 +6,13 @@ public class LoginUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly ITokenGenerator _tokenGenerator;
 
-    public LoginUserService(IUserRepository userRepository, IPasswordHasher passwordHasher)
+    public LoginUserService(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenGenerator tokenGenerator)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _tokenGenerator = tokenGenerator;
     }
 
     public async Task<LoginUserResponse> Login(LoginUserRequest request)
@@ -29,7 +31,9 @@ public class LoginUserService
         {
             throw new UnauthorizedAccessException("Invalid credentials.");
         }
-        return new LoginUserResponse(user.Id, user.Email.ToString(), "made-uptoken");
+
+        var token = _tokenGenerator.Generate(user);
+        return new LoginUserResponse(user.Id, user.Email.ToString(), token);
 
     }
     private static void ValidateRequest(LoginUserRequest request)
