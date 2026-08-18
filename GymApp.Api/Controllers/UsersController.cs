@@ -31,7 +31,7 @@ public class UsersController : ControllerBase
             await _deleteUserService.DeleteUserAsync(userId);
             return NoContent();
         }
-        catch(InvalidOperationException)
+        catch (InvalidOperationException)
         {
             return NoContent();
         }
