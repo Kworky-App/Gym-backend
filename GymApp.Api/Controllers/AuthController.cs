@@ -1,11 +1,12 @@
 using GymApp.App.Users;
-using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymApp.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
+[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly RegisterUserService _registerUserService;
