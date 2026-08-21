@@ -12,7 +12,7 @@ public class LoginUserServiceTests
     private const string ValidPassword = "Password123!";
     private const string InvalidPassword = "WrongPassword123!";
     private const string PasswordHash = FakePasswordHasher.PasswordHash;
-    private const string ExpectedToken = "made-uptoken";
+    private const string ExpectedToken = FakeTokenGenerator.Token;
 
     private const string ValidName = "John Doe";
     private static readonly DateOnly ValidDateOfBirth = new(2000, 1, 1);
@@ -20,12 +20,14 @@ public class LoginUserServiceTests
 
     private readonly FakeUserRepository _userRepository = new();
     private readonly FakePasswordHasher _passwordHasher = new();
+    private readonly FakeTokenGenerator _tokenGenerator = new();
 
     private LoginUserService CreateService()
     {
         return new LoginUserService(
             _userRepository,
-            _passwordHasher);
+            _passwordHasher,
+            _tokenGenerator);
     }
 
     private static LoginUserRequest CreateValidRequest()
