@@ -9,6 +9,7 @@ using Xunit;
 
 namespace GymApp.Tests.Api.Users;
 
+
 public class UsersControllerTests
 {
     private static readonly Guid ValidUserId = Guid.NewGuid();
