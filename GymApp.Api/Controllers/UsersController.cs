@@ -17,6 +17,13 @@ public class UsersController : ControllerBase
         _deleteUserService = deleteUserService;
     }
 
+    private (string? UserId, string? Email) ExtractUserClaims()
+    {
+        var userId = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        var email = User.FindFirst(JwtRegisteredClaimNames.Email)?.Value;
+        return (userId, email);
+    }
+
     [HttpDelete("me")]
     public async Task<IActionResult> DeleteUser()
     {
@@ -35,5 +42,18 @@ public class UsersController : ControllerBase
         {
             return NoContent();
         }
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var (userIdClaim, userEmailClaim) = ExtractUserClaims();
+
+        if (!Guid.TryParse(userIdClaim, out var userId) || string.IsNullOrWhiteSpace(userEmailClaim))
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new { Id = userId, Email = userEmailClaim });
     }
 }
