@@ -35,5 +35,8 @@ _ReSharper*/
 # JetBrains Rider
 .idea_modules/
 
+# Visual Studio
+.vs/
+
 # ASP.NET
 appsettings.Development.json
